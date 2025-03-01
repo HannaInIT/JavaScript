@@ -12,7 +12,20 @@ import { modules, students, mentors, classes } from "./hyf.js";
  *  [{ name: 'John', role: 'student' }, { name: 'Mary', role: 'mentor' }]
  */
 const getPeopleOfClass = (className) => {
-  // TODO complete this function
+  const classCurr = classes.find((classItem) => classItem.name === className);
+  if (!classCurr) {
+    return [];
+  }
+
+  const classStudents = students
+.filter((student) => student.class === className)
+  .map((student) => ({ name: student.name, role: "student" }));
+
+  const classMentors = mentors
+    .filter((mentor) => mentor.nowTeaching === classCurr.currentModule)
+    .map((mentor) => ({ name: mentor.name, role: "mentor" }));
+
+  return [...classStudents, ...classMentors];
 };
 // You can uncomment out this line to try your function
 // console.log(getPeopleOfClass('class34'));
@@ -30,7 +43,13 @@ const getPeopleOfClass = (className) => {
  *  }
  */
 const getActiveClasses = () => {
-  // TODO complete this function
+    const activeClasses = classes.filter((classItem) => classItem.active);
+
+return activeClasses.reduce((classMembers, classItem) => {
+  classMembers[classItem.name] = getPeopleOfClass(classItem.name);
+  return classMembers;
+},{})
+}
 };
 // You can uncomment out this line to try your function
 // console.log(getActiveClasses());
